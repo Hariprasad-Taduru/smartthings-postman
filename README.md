@@ -1,4 +1,4 @@
-# SmartThings Postman Web Client
+### SmartThings Postman Web Client
 
 * Purpose: A web client for accessing SmartThings API's. Supports both staging and production SmartThings environments.
 
