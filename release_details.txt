@@ -1,0 +1,11 @@
+Version 1.0 release details:
+	Date: 15-Oct-2020
+	Features: 
+		1. Submitted base code for this project.
+		2. All API's are tested for STG environment on both windows and ubuntu machine.
+		3. Currently only GET APi's are supported for below features:
+			a. Location API's
+			b. Device API's
+			c. Scene API's
+			d. Rule API's
+		4. Gives flexibility in testing favorite test location which gives devices, scenes, rules meta information.
