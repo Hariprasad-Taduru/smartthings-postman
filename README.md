@@ -22,9 +22,12 @@ Purpose: A web client for accessing SmartThings API's. Supports both staging and
 		st.stg.favorite.test.location=
 		st.prd.pat.token=
 		st.prd.favorite.test.location=
-	4. Run mvn package and run the fatty jar using below command OR load this project in Spring Tool Suite and run the main class.
-		java -jar fattyJarName
+	4. Run below commands and run the fatty jar using below command OR load this project in Spring Tool Suite and run the main class.
+		./mvnw clean
+		./mvnw package
+		java -jar target/SmartThings-Postman-0.0.1-SNAPSHOT.jar
 	5. Service starts on port 9090
+	6. You should see message "Started SmartThingsPostmanApplication in x seconds" in the console for a successfull run.
 	6. Launch chrome browser and access http://localhost:9090/swagger-ui.html
 
 #### Want to contribute? Please follow below rules and raise merge request:
