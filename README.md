@@ -3,25 +3,34 @@
 Purpose: A web client for accessing SmartThings API's. Supports both staging and production SmartThings environments.
 
 #### Technology stack used
-	Spring Boot version 2.3.4.RELEASE
-	Maven version 4.0.0
-	Java version 1.8
+	1. Spring Boot version 2.3.4.RELEASE
+	2. Maven version 4.0.0
+	3. Java version 1.8
+	4. Open API swagger UI version 1.4.6
+	5. SmartThings java SDK client version 0.0.4-PREVIEW
+	6. Lombok version 1.18.14
 	
 #### What you need to have to run this project:
-	PAT token 
-	Mobile token (optional for now)
+	1. Personal Access Token token 
+	2. Mobile token (optional for now)
 
 #### How to run this project:
-	Clone this project 
-	Create file env.config in C folder (in Windows OS), in /tmp/ (in Ubuntu OS) 
-	Add below keys in the file
+	1. Clone this project 
+	2. Create file env.config in C folder (in Windows OS) or in /tmp/ (in Ubuntu OS) 
+	3. Add below keys in the file
 		st.stg.pat.token=
 		st.stg.favorite.test.location=
 		st.prd.pat.token=
 		st.prd.favorite.test.location=
+	4. Run mvn package and run the fatty jar using below command OR load this project in Spring Tool Suite and run the main class.
+		java -jar fattyJarName
+	5. Service starts on port 9090
+	6. Launch chrome browser and access http://localhost:9090/swagger-ui.html
+
 #### Want to contribute? Please follow below rules and raise merge request:
-	Logs to be added only in client classes. Strict no for controller, service classes.
-	Generation of loggingId should only be in client classes.
+	1. Logs to be added only in client classes.
+	2. Generation of loggingId should only be in client classes.
+	3. Need to update release notes every feature addition.
 	
 #### For more details, pls contact author hariprasad.taduru@gmail.com
 
