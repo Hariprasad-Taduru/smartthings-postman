@@ -11,9 +11,9 @@ import lombok.Data;
 @Configuration
 @ConfigurationProperties
 @PropertySources({
-@PropertySource(value = {"file:C:/env.config.txt", 
-						 "file:/tmp/env.config"}, //if same key, this will 'win' 
-				ignoreResourceNotFound = true)})
+@PropertySource(value = {"file:C:/env.config", 
+			 "file:/tmp/env.config"}, //if same key, this will 'win' 
+		ignoreResourceNotFound = true)})
 @Data
 public class ExternalConfiguration {
 	@Value("${st.stg.pat.token}")
