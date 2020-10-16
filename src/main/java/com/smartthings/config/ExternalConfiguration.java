@@ -18,7 +18,7 @@ import lombok.Data;
 @Data
 @Primary
 public class ExternalConfiguration {
-	@Value("${st.stg.pat.token:0")
+	@Value("${st.stg.pat.token:0}")
 	String stgToken;
 	
 	@Value("${st.prd.pat.token:0}")
