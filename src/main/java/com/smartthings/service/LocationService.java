@@ -15,7 +15,7 @@ public class LocationService {
 	@Autowired
 	private LocationClient locationClient;
 	
-	public List<Location> getLocations(String platformUrl, String authToken) {
-		return locationClient.getLocations(platformUrl, authToken);
+	public List<Location> getLocations(String env) {
+		return locationClient.getLocations(env);
 	}
 }

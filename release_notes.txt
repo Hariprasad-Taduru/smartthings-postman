@@ -1,4 +1,15 @@
+
+Version 1.1 release details:
+-----------------------------
+	Date: 25-Oct-2020
+	Features:
+		1. Application port changed from 9090 to 5200.
+		2. All API's are implemented towards favourite test location.
+		3. Logs are added for all the client classes for tracking.
+		4. All API's are tested for both STG and PRD environments.
+
 Version 1.0 release details:
+-----------------------------
 	Date: 15-Oct-2020
 	Features: 
 		1. Submitted base code for this project.
@@ -9,3 +20,4 @@ Version 1.0 release details:
 			c. Scene API's
 			d. Rule API's
 		4. Gives flexibility in testing favorite test location which gives devices, scenes, rules meta information.
+

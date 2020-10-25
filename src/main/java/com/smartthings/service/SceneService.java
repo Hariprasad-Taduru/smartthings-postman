@@ -16,12 +16,12 @@ public class SceneService {
 	@Autowired
 	private SceneClient sceneClient;
 	
-	public List<Scene> listScenes(String platformUrl, String locationId, String authToken) {
-		return sceneClient.listScenes(platformUrl, locationId, authToken);
+	public List<Scene> listScenes(String env) {
+		return sceneClient.listScenes(env);
 	}
 	
-	public List<SceneMetaInfo> listSceneNames(String platformUrl, String locationId, String authToken) {
-		List<Scene> scenes = sceneClient.listScenes(platformUrl, locationId, authToken);
+	public List<SceneMetaInfo> listSceneNames(String env) {
+		List<Scene> scenes = sceneClient.listScenes(env);
 		
 		List<SceneMetaInfo> sceneMetaInfoList = new ArrayList<SceneMetaInfo>();
 		
@@ -32,8 +32,8 @@ public class SceneService {
 		
 	}
 	
-	public Scene getSceneDetails(String platformUrl, String sceneId, String locationId, String authToken) {
+	public Scene getSceneDetails(String sceneId, String env) {
 	
-		return sceneClient.getSceneDetails(platformUrl, sceneId, locationId, authToken);
+		return sceneClient.getSceneDetails(sceneId, env);
 	}
 }
