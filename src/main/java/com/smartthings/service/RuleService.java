@@ -16,14 +16,14 @@ public class RuleService {
 	@Autowired
 	private RuleClient ruleClient;
 	
-	public JsonNode listRules(String platformUrl, String locationId, String authToken) {
-		return ruleClient.listRules(platformUrl, locationId, authToken);
+	public JsonNode listRules(String env) {
+		return ruleClient.listRules(env);
 	}
 	
-    public List<RuleMetaInfo> listRuleNames(String platformUrl, String locationId, String authToken) {
+    public List<RuleMetaInfo> listRuleNames(String env) {
     	
     	List<RuleMetaInfo> ruleMetaInfoList = new ArrayList<RuleMetaInfo>();
-    	JsonNode rules = ruleClient.listRules(platformUrl, locationId, authToken);
+    	JsonNode rules = ruleClient.listRules(env);
 		
     	if (rules != null && rules.isArray()) {
     	    for (final JsonNode rule : rules) {
@@ -33,7 +33,7 @@ public class RuleService {
         return ruleMetaInfoList;
     }
     
-    public JsonNode getRuleDetails(String platformUrl, String ruleId, String locationId, String authToken) {
-		return ruleClient.getRuleDetails(platformUrl, ruleId, locationId, authToken);
+    public JsonNode getRuleDetails(String ruleId, String env) {
+		return ruleClient.getRuleDetails(ruleId, env);
 	}
 }

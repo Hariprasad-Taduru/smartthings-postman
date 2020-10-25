@@ -17,12 +17,12 @@ public class DeviceService {
 	@Autowired
 	private DeviceClient deviceClient;
 	
-	public List<Device> getDevices(String platformUrl, String locationId, String authToken) {
-		return deviceClient.getDevices(platformUrl, locationId, authToken);
+	public List<Device> getDevices(String env) {
+		return deviceClient.getDevices(env);
 	}
 	
-	public List<DeviceMetaInfo> getDevicesNames(String platformUrl, String locationId, String authToken) {
-		List<Device> devices = deviceClient.getDevices(platformUrl, locationId, authToken);
+	public List<DeviceMetaInfo> getDevicesNames(String env) {
+		List<Device> devices = deviceClient.getDevices(env);
 		
 		 List<DeviceMetaInfo> deviceMetaInfoList = new ArrayList<DeviceMetaInfo>();
 		 for(Device device: devices) {
@@ -32,7 +32,7 @@ public class DeviceService {
 		return deviceMetaInfoList;
 	}
 	
-	public DeviceStatus getDeviceStatus(String platformUrl, String deviceId, String authToken) {	
-		return deviceClient.getDeviceStatus(platformUrl, deviceId, authToken);
+	public DeviceStatus getDeviceStatus(String deviceId, String env) {	
+		return deviceClient.getDeviceStatus(deviceId, env);
     }
 }
