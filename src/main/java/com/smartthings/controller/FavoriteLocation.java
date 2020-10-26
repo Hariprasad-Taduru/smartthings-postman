@@ -16,12 +16,14 @@ import com.smartthings.common.FavoriteLocationMetaInfo;
 import com.smartthings.common.RuleMetaInfo;
 import com.smartthings.common.Scene;
 import com.smartthings.common.SceneMetaInfo;
+import com.smartthings.common.SmartAppMetaInfo;
 import com.smartthings.sdk.client.models.DeviceStatus;
 import com.smartthings.sdk.client.models.Location;
 import com.smartthings.service.DeviceService;
 import com.smartthings.service.LocationService;
 import com.smartthings.service.RuleService;
 import com.smartthings.service.SceneService;
+import com.smartthings.service.SmartAppService;
 
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,6 +50,9 @@ public class FavoriteLocation {
 	
 	@Autowired
 	RuleService ruleService;
+	
+	@Autowired
+	SmartAppService smartAppService;
 	
 	
 	// Location API's
@@ -150,4 +155,21 @@ public class FavoriteLocation {
 	List<Scene> getMyScenes(@RequestParam(required = true) String env) {
 		return sceneService.listScenes(env);
 	}
+	
+	// Smart App API's
+	
+	@GetMapping(value = "/smartAppNames", produces = { "application/json"})
+    @Operation(summary = "List all my SmartApp's id, name in the test location.")
+	@ApiResponse(content = @Content(schema = @Schema(hidden = true)))
+	List<SmartAppMetaInfo> getMySmartAppNames(@RequestParam(required = true) String env) {
+		return smartAppService.listSmartAppNames(env);
+	}
+	
+	@GetMapping(value = "/smartAppDetails", produces = { "application/json"})
+    @Operation(summary = "Fetch SmartApp json for the given app id.")
+	@ApiResponse(content = @Content(schema = @Schema(hidden = true)))
+	JsonNode getMySmartAppDetails(@RequestParam(required = true) String appId, @RequestParam(required = true) String env) {
+		return smartAppService.getSmartAppDetails(appId, env);
+	}
+	
 }
