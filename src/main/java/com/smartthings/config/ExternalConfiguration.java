@@ -18,15 +18,25 @@ import lombok.Data;
 @Data
 @Primary
 public class ExternalConfiguration {
+	
+	//STG parameters
 	@Value("${st.stg.pat.token:0}")
 	String stgToken;
 	
+	@Value("${st.stg.test.location:0}")
+	String stgTestLocationId;
+	
+	//ACPT parameters
+	@Value("${st.acpt.pat.token:0}")
+	String acptToken;
+			
+	@Value("${st.acpt.test.location:0}")
+	String acptTestLocationId;
+		
+	//PRD parameters
 	@Value("${st.prd.pat.token:0}")
 	String prdToken;
-	
-	@Value("${st.stg.favorite.test.location:0}")
-	String stgFavoriteTestLocationId;
-	
-	@Value("${st.prd.favorite.test.location:0}")
-	String prdFavoriteTestLocationId;
+		
+	@Value("${st.prd.test.location:0}")
+	String prdTestLocationId;
 }

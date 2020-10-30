@@ -32,6 +32,9 @@ public class SceneClient {
 	@Value("${smartthings.stgUrl}")
 	private String stgUrl; 
 	
+	@Value("${smartthings.acptUrl}")
+	private String acptUrl; 
+	
 	@Value("${smartthings.prdUrl}")
 	private String prdUrl; 
 	
@@ -49,23 +52,27 @@ public class SceneClient {
     	if (env.equals("prd")) {
 		   platformUrl = prdUrl;
 		   authToken = "Bearer " + extConfig.getPrdToken();
-		   locationId = extConfig.getPrdFavoriteTestLocationId();
-    	} else {
+		   locationId = extConfig.getPrdTestLocationId();
+    	} else if (env.equals("acpt")) {
+			platformUrl = acptUrl;
+			authToken = "Bearer " + extConfig.getAcptToken();
+			locationId = extConfig.getAcptTestLocationId();
+		} else {
 		   platformUrl = stgUrl;
 		   authToken = "Bearer " + extConfig.getStgToken();
-		   locationId = extConfig.getStgFavoriteTestLocationId();
-	}
+		   locationId = extConfig.getStgTestLocationId();
+		}
 		
-	String url = platformUrl + "/scenes?locationId=" + locationId;
-		
-	String loggingId = UUID.randomUUID().toString();
-		
-	log.info("[listScenes] Requested for environment {}, locationId: {}, logId: {}", env, locationId, loggingId);
-		
-	HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", authToken);
-        //headers.set("Accept", "application/vnd.smartthings+json;v=20200501");
-	headers.set("Accept", "application/vnd.smartthings+json;");
+		String url = platformUrl + "/scenes?locationId=" + locationId;
+			
+		String loggingId = UUID.randomUUID().toString();
+			
+		log.info("[listScenes] Requested for environment {}, locationId: {}, logId: {}", env, locationId, loggingId);
+			
+		HttpHeaders headers = new HttpHeaders();
+	        headers.set("Authorization", authToken);
+	        //headers.set("Accept", "application/vnd.smartthings+json;v=20200501");
+		headers.set("Accept", "application/vnd.smartthings+json;");
         headers.set(Constants.API_HEADER_CORRELATION_ID, loggingId);
 		
         HttpEntity<String> sceneHttpEntity = new HttpEntity<>(null, headers);
@@ -102,11 +109,15 @@ public class SceneClient {
     	if (env.equals("prd")) {
 		   platformUrl = prdUrl;
 		   authToken = "Bearer " + extConfig.getPrdToken();
-		   locationId = extConfig.getPrdFavoriteTestLocationId();
+		   locationId = extConfig.getPrdTestLocationId();
+		} else if (env.equals("acpt")) {
+			platformUrl = acptUrl;
+			authToken = "Bearer " + extConfig.getAcptToken();
+			locationId = extConfig.getAcptTestLocationId();
 		} else {
 		   platformUrl = stgUrl;
 		   authToken = "Bearer " + extConfig.getStgToken();
-		   locationId = extConfig.getStgFavoriteTestLocationId();
+		   locationId = extConfig.getStgTestLocationId();
 		}
 		
 		String url = platformUrl + "/scenes/" + sceneId + "?locationId=" + locationId;

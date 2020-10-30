@@ -16,9 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.smartthings.common.Constants;
-import com.smartthings.common.PagedScenes;
 import com.smartthings.common.PagedSmartApps;
-import com.smartthings.common.Scene;
 import com.smartthings.config.ExternalConfiguration;
 import com.smartthings.util.STObjectMapper;
 
@@ -33,6 +31,9 @@ public class SmartAppClient {
 	
 	@Value("${smartthings.stgUrl}")
 	private String stgUrl; 
+	
+	@Value("${smartthings.acptUrl}")
+	private String acptUrl; 
 	
 	@Value("${smartthings.prdUrl}")
 	private String prdUrl; 
@@ -51,11 +52,15 @@ public class SmartAppClient {
 		if (env.equals("prd")) {
 			platformUrl = prdUrl;
 			authToken = "Bearer " + extConfig.getPrdToken();
-			locationId = extConfig.getPrdFavoriteTestLocationId();
+			locationId = extConfig.getPrdTestLocationId();
+		} else if (env.equals("acpt")) {
+			platformUrl = acptUrl;
+			authToken = "Bearer " + extConfig.getAcptToken();
+			locationId = extConfig.getAcptTestLocationId();
 		} else {
 			platformUrl = stgUrl;
 			authToken = "Bearer " + extConfig.getStgToken();
-			locationId = extConfig.getStgFavoriteTestLocationId();
+			locationId = extConfig.getStgTestLocationId();
 		}
 		
 		String url = platformUrl + "/installedapps?locationId=" + locationId;
@@ -105,11 +110,15 @@ public class SmartAppClient {
 		if (env.equals("prd")) {
 			platformUrl = prdUrl;
 			authToken = "Bearer " + extConfig.getPrdToken();
-			locationId = extConfig.getPrdFavoriteTestLocationId();
+			locationId = extConfig.getPrdTestLocationId();
+		} else if (env.equals("acpt")) {
+			platformUrl = acptUrl;
+			authToken = "Bearer " + extConfig.getAcptToken();
+			locationId = extConfig.getAcptTestLocationId();
 		} else {
 			platformUrl = stgUrl;
 			authToken = "Bearer " + extConfig.getStgToken();
-			locationId = extConfig.getStgFavoriteTestLocationId();
+			locationId = extConfig.getStgTestLocationId();
 		}
 			
 		String url = platformUrl + "/installedapps/" + appId + "?locationId=" + locationId;

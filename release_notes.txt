@@ -1,3 +1,10 @@
+Version 1.3 release details:
+-----------------------------
+	Date: 30-Oct-2020
+	Features:
+		1. Acceptance environment support added.
+		2. More logs are logged in the client classes for debugging.
+
 Version 1.2 release details:
 -----------------------------
 	Date: 26-Oct-2020

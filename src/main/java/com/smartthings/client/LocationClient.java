@@ -26,6 +26,9 @@ public class LocationClient {
 	@Value("${smartthings.stgUrl}")
 	private String stgUrl; 
 	
+	@Value("${smartthings.acptUrl}")
+	private String acptUrl; 
+	
 	@Value("${smartthings.prdUrl}")
 	private String prdUrl; 
 	
@@ -41,11 +44,15 @@ public class LocationClient {
 		if (env.equals("prd")) {
 			platformUrl = prdUrl;
 			authToken = "Bearer " + extConfig.getPrdToken();
-			locationId = extConfig.getPrdFavoriteTestLocationId();
+			locationId = extConfig.getPrdTestLocationId();
+		} else if (env.equals("acpt")) {
+			platformUrl = acptUrl;
+			authToken = "Bearer " + extConfig.getAcptToken();
+			locationId = extConfig.getAcptTestLocationId();
 		} else {
 			platformUrl = stgUrl;
 			authToken = "Bearer " + extConfig.getStgToken();
-			locationId = extConfig.getStgFavoriteTestLocationId();
+			locationId = extConfig.getStgTestLocationId();
 		}
 		
 		log.info("[getLocations] Requested for environment {}, locationId: {}", env, locationId);
