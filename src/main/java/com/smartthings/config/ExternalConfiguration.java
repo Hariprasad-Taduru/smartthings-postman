@@ -13,7 +13,7 @@ import lombok.Data;
 @ConfigurationProperties
 @PropertySources({
 @PropertySource(value = {"file:C:/env.config", 
-			 "file:/tmp/env.config"}, //if same key, this will 'win' 
+			 "file:/etc/env.config"}, //if same key, this will 'win' 
 		ignoreResourceNotFound = true)})
 @Data
 @Primary
