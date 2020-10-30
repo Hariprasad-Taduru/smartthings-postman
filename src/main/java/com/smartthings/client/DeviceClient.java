@@ -38,7 +38,7 @@ public class DeviceClient {
 	ApiClient apiClient = new ApiClient();
 	
 	public DeviceStatus getDeviceStatus(String deviceId, String env) {
-		if (env == "prd") {
+		if (env.equals("prd")) {
 			platformUrl = prdUrl;
 			authToken = "Bearer " + extConfig.getPrdToken();
 			locationId = extConfig.getPrdFavoriteTestLocationId();
@@ -59,7 +59,7 @@ public class DeviceClient {
 	
 
 	public List<Device> getDevices(String env) {
-		if (env == "prd") {
+		if (env.equals("prd")) {
 			platformUrl = prdUrl;
 			authToken = "Bearer " + extConfig.getPrdToken();
 			locationId = extConfig.getPrdFavoriteTestLocationId();

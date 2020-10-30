@@ -42,7 +42,7 @@ public class RuleClient {
     private RestTemplate restTemplate;
 		
 	public JsonNode listRules(String env) {
-		if (env == "prd") {
+		if (env.equals("prd")) {
 			platformUrl = prdUrl;
 			authToken = "Bearer " + extConfig.getPrdToken();
 			locationId = extConfig.getPrdFavoriteTestLocationId();
@@ -80,7 +80,7 @@ public class RuleClient {
     }
 	
 	public JsonNode getRuleDetails(String ruleId, String env) {
-		if (env == "prd") {
+		if (env.equals("prd")) {
 			platformUrl = prdUrl;
 			authToken = "Bearer " + extConfig.getPrdToken();
 			locationId = extConfig.getPrdFavoriteTestLocationId();
