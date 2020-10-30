@@ -69,7 +69,7 @@ public class RuleClient {
         try {
         	ruleResponse = restTemplate.exchange(url, HttpMethod.GET, ruleHttpEntity, String.class);
             if (ruleResponse.getStatusCode().is2xxSuccessful()) {
-            	log.info("[listRules] Request success for environment {}, locationId: {}, logId: {}", env, locationId, loggingId);
+            	log.info("[listRules] Request success for environment {}, locationId: {}, logId: {} rules: {} ",  env, locationId, loggingId, ruleResponse.toString());
             	JsonNode rules = stObjectMapper.readTree(ruleResponse.getBody()).get("items");
             	return rules;
             }

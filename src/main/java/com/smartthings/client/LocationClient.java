@@ -88,10 +88,13 @@ public class LocationClient {
 		apiClient.setBasePath(completeUrl);
         
         LocationsApi locationApi  =  apiClient.buildClient(LocationsApi.class);
+        try {
+        	Location location = locationApi.getLocation(authToken, locationId);
         
-        Location location = locationApi.getLocation(authToken, locationId);
-        
-        completeLocations.add(location);
+        	completeLocations.add(location);
+        } catch (Exception e) {
+            log.error("[getLocationsHelper] Exception: {}, For the location: {}", e, locationId);
+        }
         
        return completeLocations;
     }

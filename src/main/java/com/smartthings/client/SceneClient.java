@@ -72,7 +72,7 @@ public class SceneClient {
         List<Scene> scenes = new ArrayList<Scene>();
         
         scenes = getScenesHelper(url, sceneHttpEntity, scenes);
-        log.info("[listScenes] Request success for environment {}, locationId: {}, logId {}", env, locationId, loggingId);
+        log.info("[listScenes] Request success for environment {}, locationId: {}, logId {}, scenes: {}", env, locationId, loggingId, scenes.toString());
         return scenes;
     }
 	
