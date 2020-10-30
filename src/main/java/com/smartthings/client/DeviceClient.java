@@ -80,7 +80,7 @@ public class DeviceClient {
 	    	devices.addAll(pagedDevice.getItems()); 
 	    }
 	    
-	    log.info("[getDevices] Request success for environment {}, locationId: {}", env, locationId);
+	    log.info("[getDevices] Request success for environment {}, locationId: {}, devices: {}", env, locationId, devices.toString());
 	    return devices;
 	}
 	

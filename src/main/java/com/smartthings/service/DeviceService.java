@@ -26,7 +26,7 @@ public class DeviceService {
 		
 		 List<DeviceMetaInfo> deviceMetaInfoList = new ArrayList<DeviceMetaInfo>();
 		 for(Device device: devices) {
-			 deviceMetaInfoList.add(new DeviceMetaInfo(device.getDeviceId(), device.getLabel()));
+			 deviceMetaInfoList.add(new DeviceMetaInfo(device.getDeviceId(), device.getLabel(), device.getDeviceTypeName()));
 		 }
 		 
 		return deviceMetaInfoList;

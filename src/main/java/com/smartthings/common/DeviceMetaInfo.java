@@ -9,4 +9,6 @@ public class DeviceMetaInfo {
 	String deviceId;
 	
 	String deviceLabelName;
+	
+	String deviceTypeName;
 }

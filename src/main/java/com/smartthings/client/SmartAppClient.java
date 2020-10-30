@@ -75,7 +75,7 @@ public class SmartAppClient {
         List<JsonNode> smartApps = new ArrayList<JsonNode>();
         
         smartApps = getSmartAppsHelper(url, smartAppHttpEntity, smartApps);
-        log.info("[listSmartApps] Request success for environment {}, locationId: {}, logId {}", env, locationId, loggingId);
+        log.info("[listSmartApps] Request success for environment {}, locationId: {}, logId {}, smartApps: {}", env, locationId, loggingId, smartApps.toString());
         return smartApps;
     }
 	
