@@ -16,19 +16,21 @@ Purpose: A web client for accessing SmartThings API's. Supports both staging and
 
 #### How to run this project:
 	1. Clone this project 
-	2. Create file env.config in C folder (in Windows OS) or in /tmp/ (in Ubuntu OS) 
+	2. Create file env.config in C folder (in Windows OS) or in /etc/ (in Ubuntu OS) 
 	3. Add below keys in the file
 		st.stg.pat.token=
-		st.stg.favorite.test.location=
+		st.stg.test.location=
+		st.acpt.pat.token=
+		st.acpt.test.location=
 		st.prd.pat.token=
-		st.prd.favorite.test.location=
+		st.prd.test.location=
 	4. Run below commands and run the fatty jar using below command OR load this project in Spring Tool Suite and run the main class.
 		./mvnw clean
 		./mvnw package
 		java -jar target/SmartThings-Postman-0.0.1-SNAPSHOT.jar
-	5. Service starts on port 9090
+	5. Service starts on port 5200
 	6. You should see message "Started SmartThingsPostmanApplication in x seconds" in the console for a successfull run.
-	6. Launch chrome browser and access http://localhost:9090/swagger-ui.html
+	6. Launch chrome browser and access http://localhost:5200/swagger-ui.html
 
 #### Want to contribute? Please follow below rules and raise merge request:
 	1. Logs to be added only in client classes.
