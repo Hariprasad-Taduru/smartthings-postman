@@ -38,7 +38,7 @@ public class LocationClient {
 	
 	public List<Location> getLocations(String env) {
 		
-		if (env == "prd") {
+		if (env.equals("prd")) {
 			platformUrl = prdUrl;
 			authToken = "Bearer " + extConfig.getPrdToken();
 			locationId = extConfig.getPrdFavoriteTestLocationId();

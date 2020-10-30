@@ -48,7 +48,7 @@ public class SmartAppClient {
     private RestTemplate restTemplate;
 		
 	public List<JsonNode> listSmartApps(String env) {
-		if (env == "prd") {
+		if (env.equals("prd")) {
 			platformUrl = prdUrl;
 			authToken = "Bearer " + extConfig.getPrdToken();
 			locationId = extConfig.getPrdFavoriteTestLocationId();
@@ -102,7 +102,7 @@ public class SmartAppClient {
     }
 	
 	public JsonNode getSmartAppDetails(String appId, String env) {
-		if (env == "prd") {
+		if (env.equals("prd")) {
 			platformUrl = prdUrl;
 			authToken = "Bearer " + extConfig.getPrdToken();
 			locationId = extConfig.getPrdFavoriteTestLocationId();

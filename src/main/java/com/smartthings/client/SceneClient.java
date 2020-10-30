@@ -46,14 +46,14 @@ public class SceneClient {
     private RestTemplate restTemplate;
 		
     public List<Scene> listScenes(String env) {
-	if (env == "prd") {
-	   platformUrl = prdUrl;
-	   authToken = "Bearer " + extConfig.getPrdToken();
-	   locationId = extConfig.getPrdFavoriteTestLocationId();
-	} else {
-	   platformUrl = stgUrl;
-	   authToken = "Bearer " + extConfig.getStgToken();
-	   locationId = extConfig.getStgFavoriteTestLocationId();
+    	if (env.equals("prd")) {
+		   platformUrl = prdUrl;
+		   authToken = "Bearer " + extConfig.getPrdToken();
+		   locationId = extConfig.getPrdFavoriteTestLocationId();
+    	} else {
+		   platformUrl = stgUrl;
+		   authToken = "Bearer " + extConfig.getStgToken();
+		   locationId = extConfig.getStgFavoriteTestLocationId();
 	}
 		
 	String url = platformUrl + "/scenes?locationId=" + locationId;
@@ -99,26 +99,26 @@ public class SceneClient {
     }
 	
     public Scene getSceneDetails(String sceneId, String env) {
-	if (env == "prd") {
-	   platformUrl = prdUrl;
-	   authToken = "Bearer " + extConfig.getPrdToken();
-	   locationId = extConfig.getPrdFavoriteTestLocationId();
-	} else {
-	   platformUrl = stgUrl;
-	   authToken = "Bearer " + extConfig.getStgToken();
-	   locationId = extConfig.getStgFavoriteTestLocationId();
-	}
+    	if (env.equals("prd")) {
+		   platformUrl = prdUrl;
+		   authToken = "Bearer " + extConfig.getPrdToken();
+		   locationId = extConfig.getPrdFavoriteTestLocationId();
+		} else {
+		   platformUrl = stgUrl;
+		   authToken = "Bearer " + extConfig.getStgToken();
+		   locationId = extConfig.getStgFavoriteTestLocationId();
+		}
 		
-	String url = platformUrl + "/scenes/" + sceneId + "?locationId=" + locationId;
-	
-	String loggingId = UUID.randomUUID().toString();
+		String url = platformUrl + "/scenes/" + sceneId + "?locationId=" + locationId;
 		
-	log.info("[getSceneDetails] Requested for environment {}, locationId: {}, logId: {}", env, locationId, loggingId);
-		
-	HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", authToken);
-        //headers.set("Accept", "application/vnd.smartthings+json;v=20200501");
-	headers.set("Accept", "application/vnd.smartthings+json;");
+		String loggingId = UUID.randomUUID().toString();
+			
+		log.info("[getSceneDetails] Requested for environment {}, locationId: {}, logId: {}", env, locationId, loggingId);
+			
+		HttpHeaders headers = new HttpHeaders();
+	        headers.set("Authorization", authToken);
+	        //headers.set("Accept", "application/vnd.smartthings+json;v=20200501");
+		headers.set("Accept", "application/vnd.smartthings+json;");
         headers.set(Constants.API_HEADER_CORRELATION_ID, loggingId);
 		
         HttpEntity<String> sceneHttpEntity = new HttpEntity<>(null, headers);
