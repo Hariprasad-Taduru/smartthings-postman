@@ -15,6 +15,10 @@ public class LocationService {
 	@Autowired
 	private LocationClient locationClient;
 	
+	public Location getTestLocation(String env) {
+		return locationClient.getTestLocation(env);
+	}
+	
 	public List<Location> getLocations(String env) {
 		return locationClient.getLocations(env);
 	}

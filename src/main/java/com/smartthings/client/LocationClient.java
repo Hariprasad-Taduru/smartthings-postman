@@ -39,6 +39,35 @@ public class LocationClient {
 	private String authToken;
 	private String locationId;
 	
+	public Location getTestLocation(String env) {
+		Location testLocation = null;
+		if (env.equals("prd")) {
+			platformUrl = prdUrl;
+			authToken = "Bearer " + extConfig.getPrdToken();
+			locationId = extConfig.getPrdTestLocationId();
+		} else if (env.equals("acpt")) {
+			platformUrl = acptUrl;
+			authToken = "Bearer " + extConfig.getAcptToken();
+			locationId = extConfig.getAcptTestLocationId();
+		} else {
+			platformUrl = stgUrl;
+			authToken = "Bearer " + extConfig.getStgToken();
+			locationId = extConfig.getStgTestLocationId();
+		}
+		
+		log.info("[getTestLocation] Requested for environment {}, locationId: {}", env, locationId);
+		
+		apiClient.setBasePath(platformUrl);
+        
+        LocationsApi locationApi  =  apiClient.buildClient(LocationsApi.class);
+        try {
+        	testLocation = locationApi.getLocation(authToken, locationId);
+        	log.info("[getTestLocation] Request success for environment {}, locationId: {}, details: {}", env, locationId, testLocation.toString());
+        } catch (Exception e) {
+            log.error("[getTestLocation] Exception: {}, For the location: {}", e, locationId);
+        }
+        return testLocation;
+	}
 	public List<Location> getLocations(String env) {
 		
 		if (env.equals("prd")) {

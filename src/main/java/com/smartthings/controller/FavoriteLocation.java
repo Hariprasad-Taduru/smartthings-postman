@@ -85,6 +85,13 @@ public class FavoriteLocation {
 		return new FavoriteLocationMetaInfo(devicesMetaInfo, sceneMetaInfo, ruleMetaInfo);
 	}
 	
+	@GetMapping(value = "/testlocation", produces = { "application/json"})
+    @Operation(summary = "Get test location details")
+	@ApiResponse(content = @Content(schema = @Schema(hidden = true)))
+	Location getMyTestLocation(@RequestParam(required = true) String env) {
+		return locationService.getTestLocation(env);
+	}
+	
 	@GetMapping(value = "/locations", produces = { "application/json"})
     @Operation(summary = "List all my locations.")
 	@ApiResponse(content = @Content(schema = @Schema(hidden = true)))
