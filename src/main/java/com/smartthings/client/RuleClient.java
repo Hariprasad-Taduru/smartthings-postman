@@ -34,6 +34,16 @@ public class RuleClient {
 	@Value("${smartthings.prdUrl}")
 	private String prdUrl; 
 	
+	// OCF Stuff
+	@Value("${smartthings.stgOCFRuleUrl}")
+	private String stgOCFRuleUrl;
+	
+	@Value("${smartthings.acptOCFRuleUrl}")
+	private String acptOCFRuleUrl;
+	
+	@Value("${smartthings.prdOCFRuleUrl}")
+	private String prdOCFRuleUrl;
+	
 	private String platformUrl;
 	private String authToken;
 	private String locationId;
@@ -126,4 +136,88 @@ public class RuleClient {
         }
         return null;
 	}
+	
+	public JsonNode listOCFRulesAndScenes(String env) {
+		if (env.equals("prd")) {
+			platformUrl = prdOCFRuleUrl;
+			authToken = "Bearer " + extConfig.getPrdToken();
+			locationId = extConfig.getPrdTestLocationId();
+		} else if (env.equals("acpt")) {
+			platformUrl = acptOCFRuleUrl;
+			authToken = "Bearer " + extConfig.getAcptToken();
+			locationId = extConfig.getAcptTestLocationId();
+		} else {
+			platformUrl = stgOCFRuleUrl;
+			authToken = "Bearer " + extConfig.getStgToken();
+			locationId = extConfig.getStgTestLocationId();
+		}
+		
+		String url = platformUrl + "?gid=" + locationId;
+		
+		String loggingId = UUID.randomUUID().toString();
+		
+		log.info("[listOCFRulesAndScenes] Requested for environment {}, locationId: {}, logId: {}", env, locationId, loggingId);
+		
+		HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", authToken);
+        headers.set("Accept", "application/vnd.smartthings+json;");
+        headers.set(Constants.API_HEADER_CORRELATION_ID, loggingId);
+		
+        HttpEntity<String> ruleHttpEntity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> ruleResponse = null;
+        
+        try {
+        	ruleResponse = restTemplate.exchange(url, HttpMethod.GET, ruleHttpEntity, String.class);
+            if (ruleResponse.getStatusCode().is2xxSuccessful()) {
+            	log.info("[listOCFRulesAndScenes] Request success for environment {}, locationId: {}, logId: {} rules: {} ",  env, locationId, loggingId, ruleResponse.toString());
+            	JsonNode ocfRules = stObjectMapper.readTree(ruleResponse.getBody());
+            	return ocfRules;
+            }
+        } catch (Exception e) {
+            log.error("[listOCFRulesAndScenes] Exception: {}, Response: {}, LogId {}", e, ruleResponse, loggingId);
+        }
+        return null;
+    }
+	
+	public JsonNode getOCFRuleOrSceneDetails(String ruleId, String env) {
+		if (env.equals("prd")) {
+			platformUrl = prdOCFRuleUrl;
+			authToken = "Bearer " + extConfig.getPrdToken();
+			locationId = extConfig.getPrdTestLocationId();
+		} else if (env.equals("acpt")) {
+			platformUrl = acptOCFRuleUrl;
+			authToken = "Bearer " + extConfig.getAcptToken();
+			locationId = extConfig.getAcptTestLocationId();
+		} else {
+			platformUrl = stgOCFRuleUrl;
+			authToken = "Bearer " + extConfig.getStgToken();
+			locationId = extConfig.getStgTestLocationId();
+		}
+		
+		String url = platformUrl + "/" + ruleId + "?gid=" + locationId;
+		
+		String loggingId = UUID.randomUUID().toString();
+		
+		log.info("[getOCFRuleOrSceneDetails] Requested for environment {}, locationId: {}, logId: {}", env, locationId, loggingId);
+		
+		HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", authToken);
+        headers.set("Accept", "application/vnd.smartthings+json;");
+        headers.set(Constants.API_HEADER_CORRELATION_ID, loggingId);
+		
+        HttpEntity<String> ruleHttpEntity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> ruleResponse = null;
+        
+        try {
+        	ruleResponse = restTemplate.exchange(url, HttpMethod.GET, ruleHttpEntity, String.class);
+            if (ruleResponse.getStatusCode().is2xxSuccessful()) {
+            	log.info("[getOCFRuleOrSceneDetails] Request success for environment {}, locationId: {}, logId: {} rules: {} ",  env, locationId, loggingId, ruleResponse.toString());
+            	JsonNode ocfRule = stObjectMapper.readTree(ruleResponse.getBody());
+            	return ocfRule;
+            }
+        } catch (Exception e) {
+            log.error("[getOCFRuleOrSceneDetails] Exception: {}, Response: {}, LogId {}", e, ruleResponse, loggingId);
+        }
+        return null;
+    }
 }
