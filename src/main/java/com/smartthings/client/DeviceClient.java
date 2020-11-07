@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.smartthings.common.DeviceCommandResponse;
 import com.smartthings.config.ExternalConfiguration;
 import com.smartthings.sdk.client.ApiClient;
 import com.smartthings.sdk.client.methods.DevicesApi;
@@ -121,7 +122,7 @@ public class DeviceClient {
         return completePagedDevices;
     }
 	
-	public String executeDeviceCommands(String deviceId, String component, String capability, String command, String env) {
+	public DeviceCommandResponse executeDeviceCommands(String deviceId, String component, String capability, String command, String argument, String env) {
 		
 		if (env.equals("prd")) {
 			platformUrl = prdUrl;
@@ -137,14 +138,15 @@ public class DeviceClient {
 			locationId = extConfig.getStgTestLocationId();
 		}
 		
-		log.info("[executeDeviceCommands] Requested for environment {}, deviceId: {}, component: {}, capability: {}, command: {}", 
-										env, deviceId, component, capability, command);
+		log.info("[executeDeviceCommands] Requested for environment {}, deviceId: {}, component: {}, capability: {}, command: {}, argument: {}", 
+										env, deviceId, component, capability, command, argument);
 		
 
 		DeviceCommand deviceCommand = new DeviceCommand();
 		deviceCommand.component(component);
 		deviceCommand.setCapability(capability);
 		deviceCommand.setCommand(command);
+		deviceCommand.addArgumentsItem(argument);
 		
 		DeviceCommandsRequest commands = new DeviceCommandsRequest();
 		commands.addCommandsItem(deviceCommand);
@@ -156,6 +158,6 @@ public class DeviceClient {
         log.info("[executeDeviceCommands] Request success for environment {}, deviceId: {}, commandResponse: {}", env, deviceId, commandResponse.toString());
         
 		
-		return "SUCCESS";
+		return new DeviceCommandResponse(deviceId, component, capability, command, argument, "success");
 	}
 }

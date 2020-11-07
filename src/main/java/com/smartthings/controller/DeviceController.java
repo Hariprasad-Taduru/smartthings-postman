@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.smartthings.common.DeviceCommandResponse;
 import com.smartthings.common.DeviceMetaInfo;
 import com.smartthings.sdk.client.models.DeviceStatus;
 import com.smartthings.service.DeviceService;
@@ -48,11 +49,12 @@ public class DeviceController {
 	@GetMapping(value = "/deviceCommands", produces = { "application/json"})
     @Operation(summary = "Execute commands on the given device id.")
 	@ApiResponse(content = @Content(schema = @Schema(hidden = true)))
-	String executeDeviceCommands(@RequestParam(required = true) String deviceId, 
+	DeviceCommandResponse executeDeviceCommands(@RequestParam(required = true) String deviceId, 
 									   @RequestParam(required = true) String component,
 									   @RequestParam(required = true) String capability,
 									   @RequestParam(required = true) String command,
+									   @RequestParam(required = true) String argument,
 									   @RequestParam(required = true, defaultValue="stg") String env) {
-		return deviceService.executeDeviceCommands(deviceId, component, capability, command, env);
+		return deviceService.executeDeviceCommands(deviceId, component, capability, command, argument, env);
 	}
 }
