@@ -1,3 +1,9 @@
+Version 2.0 release details:
+-----------------------------
+	Date: 07-Nov-2020
+	Features:
+		1. Support for executing commands on devices added.
+
 Version 1.4 release details:
 -----------------------------
 	Date: 01-Nov-2020

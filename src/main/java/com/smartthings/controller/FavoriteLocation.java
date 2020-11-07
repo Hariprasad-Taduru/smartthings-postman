@@ -115,6 +115,17 @@ public class FavoriteLocation {
 		return deviceService.getDeviceStatus(deviceId, env);
 	}
 	
+	@GetMapping(value = "/deviceCommands", produces = { "application/json"})
+    @Operation(summary = "Execute commands on the given device id.")
+	@ApiResponse(content = @Content(schema = @Schema(hidden = true)))
+	String executeDeviceCommands(@RequestParam(required = true) String deviceId, 
+									   @RequestParam(required = true) String component,
+									   @RequestParam(required = true) String capability,
+									   @RequestParam(required = true) String command,
+									   @RequestParam(required = true, defaultValue="stg") String env) {
+		return deviceService.executeDeviceCommands(deviceId, component, capability, command, env);
+	}
+	
 	
 	// Rule API's
 	
