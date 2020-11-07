@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.smartthings.client.DeviceClient;
+import com.smartthings.common.DeviceCommandResponse;
 import com.smartthings.common.DeviceMetaInfo;
 import com.smartthings.sdk.client.models.Device;
 import com.smartthings.sdk.client.models.DeviceStatus;
@@ -36,7 +37,7 @@ public class DeviceService {
 		return deviceClient.getDeviceStatus(deviceId, env);
     }
 	
-	public String executeDeviceCommands(String deviceId, String component, String capability, String command, String env) {	
-		return deviceClient.executeDeviceCommands(deviceId, component, capability, command, env);
+	public DeviceCommandResponse executeDeviceCommands(String deviceId, String component, String capability, String command, String argument, String env) {	
+		return deviceClient.executeDeviceCommands(deviceId, component, capability, command, argument, env);
     }
 }
