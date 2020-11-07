@@ -26,7 +26,7 @@ public class DeviceService {
 		
 		 List<DeviceMetaInfo> deviceMetaInfoList = new ArrayList<DeviceMetaInfo>();
 		 for(Device device: devices) {
-			 deviceMetaInfoList.add(new DeviceMetaInfo(device.getDeviceId(), device.getLabel(), device.getDeviceTypeName()));
+			 deviceMetaInfoList.add(new DeviceMetaInfo(device.getDeviceId(), device.getLabel(), device.getDeviceTypeName(), device));
 		 }
 		 
 		return deviceMetaInfoList;
@@ -34,5 +34,9 @@ public class DeviceService {
 	
 	public DeviceStatus getDeviceStatus(String deviceId, String env) {	
 		return deviceClient.getDeviceStatus(deviceId, env);
+    }
+	
+	public String executeDeviceCommands(String deviceId, String component, String capability, String command, String env) {	
+		return deviceClient.executeDeviceCommands(deviceId, component, capability, command, env);
     }
 }

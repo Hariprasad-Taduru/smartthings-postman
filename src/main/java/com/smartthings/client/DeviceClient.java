@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 import com.smartthings.config.ExternalConfiguration;
 import com.smartthings.sdk.client.ApiClient;
 import com.smartthings.sdk.client.methods.DevicesApi;
+import com.smartthings.sdk.client.models.CreateDeviceCommandsResponse;
 import com.smartthings.sdk.client.models.Device;
+import com.smartthings.sdk.client.models.DeviceCommand;
+import com.smartthings.sdk.client.models.DeviceCommandsRequest;
 import com.smartthings.sdk.client.models.DeviceStatus;
 import com.smartthings.sdk.client.models.PagedDevices;
 
@@ -117,4 +120,42 @@ public class DeviceClient {
         
         return completePagedDevices;
     }
+	
+	public String executeDeviceCommands(String deviceId, String component, String capability, String command, String env) {
+		
+		if (env.equals("prd")) {
+			platformUrl = prdUrl;
+			authToken = "Bearer " + extConfig.getPrdToken();
+			locationId = extConfig.getPrdTestLocationId();
+		} else if (env.equals("acpt")) {
+			platformUrl = acptUrl;
+			authToken = "Bearer " + extConfig.getAcptToken();
+			locationId = extConfig.getAcptTestLocationId();
+		} else {
+			platformUrl = stgUrl;
+			authToken = "Bearer " + extConfig.getStgToken();
+			locationId = extConfig.getStgTestLocationId();
+		}
+		
+		log.info("[executeDeviceCommands] Requested for environment {}, deviceId: {}, component: {}, capability: {}, attribute: {}", 
+										env, deviceId, component, capability, attribute);
+		
+
+		DeviceCommand deviceCommand = new DeviceCommand();
+		deviceCommand.component(component);
+		deviceCommand.setCapability(capability);
+		deviceCommand.setCommand(command);
+		
+		DeviceCommandsRequest commands = new DeviceCommandsRequest();
+		commands.addCommandsItem(deviceCommand);
+		
+		apiClient.setBasePath(platformUrl);
+        DevicesApi devicesApi = apiClient.buildClient(DevicesApi.class);
+        
+        CreateDeviceCommandsResponse commandResponse = devicesApi.executeDeviceCommands(authToken, deviceId, commands);
+        log.info("[executeDeviceCommands] Request success for environment {}, deviceId: {}, commandResponse: {}", env, deviceId, commandResponse.toString());
+        
+		
+		return "SUCCESS";
+	}
 }
