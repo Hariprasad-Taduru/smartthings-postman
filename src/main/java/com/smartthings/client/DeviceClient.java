@@ -137,8 +137,8 @@ public class DeviceClient {
 			locationId = extConfig.getStgTestLocationId();
 		}
 		
-		log.info("[executeDeviceCommands] Requested for environment {}, deviceId: {}, component: {}, capability: {}, attribute: {}", 
-										env, deviceId, component, capability, attribute);
+		log.info("[executeDeviceCommands] Requested for environment {}, deviceId: {}, component: {}, capability: {}, command: {}", 
+										env, deviceId, component, capability, command);
 		
 
 		DeviceCommand deviceCommand = new DeviceCommand();
