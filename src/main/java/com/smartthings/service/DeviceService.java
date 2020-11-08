@@ -37,7 +37,7 @@ public class DeviceService {
 		return deviceClient.getDeviceStatus(deviceId, env);
     }
 	
-	public DeviceCommandResponse executeDeviceCommands(String deviceId, String component, String capability, String command, String argument, String env) {	
-		return deviceClient.executeDeviceCommands(deviceId, component, capability, command, argument, env);
+	public DeviceCommandResponse executeDeviceCommands(String deviceId, String component, String capability, String command, String argument, String isSimulatedDevice, String env) {	
+		return deviceClient.executeDeviceCommands(deviceId, component, capability, command, argument, isSimulatedDevice, env);
     }
 }

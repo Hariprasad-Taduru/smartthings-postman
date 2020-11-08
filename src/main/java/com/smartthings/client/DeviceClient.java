@@ -4,11 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.smartthings.common.Constants;
 import com.smartthings.common.DeviceCommandResponse;
 import com.smartthings.config.ExternalConfiguration;
 import com.smartthings.sdk.client.ApiClient;
@@ -19,6 +27,7 @@ import com.smartthings.sdk.client.models.DeviceCommand;
 import com.smartthings.sdk.client.models.DeviceCommandsRequest;
 import com.smartthings.sdk.client.models.DeviceStatus;
 import com.smartthings.sdk.client.models.PagedDevices;
+import com.smartthings.util.STObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,6 +50,12 @@ public class DeviceClient {
 	private String platformUrl;
 	private String authToken;
 	private String locationId;
+	
+	@Autowired
+	private STObjectMapper stObjectMapper;
+	
+	@Autowired
+    private RestTemplate restTemplate;
 
 	ApiClient apiClient = new ApiClient();
 	
@@ -122,7 +137,7 @@ public class DeviceClient {
         return completePagedDevices;
     }
 	
-	public DeviceCommandResponse executeDeviceCommands(String deviceId, String component, String capability, String command, String argument, String env) {
+	public DeviceCommandResponse executeDeviceCommands(String deviceId, String component, String capability, String command, String argument, String isSimulatedDevice, String env) {
 		
 		if (env.equals("prd")) {
 			platformUrl = prdUrl;
@@ -138,26 +153,52 @@ public class DeviceClient {
 			locationId = extConfig.getStgTestLocationId();
 		}
 		
-		log.info("[executeDeviceCommands] Requested for environment {}, deviceId: {}, component: {}, capability: {}, command: {}, argument: {}", 
-										env, deviceId, component, capability, command, argument);
+		log.info("[executeDeviceCommands] Requested for environment {}, deviceId: {}, component: {}, capability: {}, command: {}, argument: {}, isSimulatedDevice: {}", 
+										env, deviceId, component, capability, command, argument, isSimulatedDevice);
 		
-
-		DeviceCommand deviceCommand = new DeviceCommand();
-		deviceCommand.component(component);
-		deviceCommand.setCapability(capability);
-		deviceCommand.setCommand(command);
-		deviceCommand.addArgumentsItem(argument);
-		
-		DeviceCommandsRequest commands = new DeviceCommandsRequest();
-		commands.addCommandsItem(deviceCommand);
-		
-		apiClient.setBasePath(platformUrl);
-        DevicesApi devicesApi = apiClient.buildClient(DevicesApi.class);
-        
-        CreateDeviceCommandsResponse commandResponse = devicesApi.executeDeviceCommands(authToken, deviceId, commands);
-        log.info("[executeDeviceCommands] Request success for environment {}, deviceId: {}, commandResponse: {}", env, deviceId, commandResponse.toString());
-        
-		
-		return new DeviceCommandResponse(deviceId, component, capability, command, argument, "success");
+		String loggingId = UUID.randomUUID().toString();
+		try {
+			if (isSimulatedDevice.equals("1")) {
+				log.info("[executeDeviceCommands] This is sumilated device.");
+				String url = platformUrl + "/elder/" + locationId + "/api/devices/" + deviceId + "/commands/action/" + command;
+				
+				HttpHeaders headers = new HttpHeaders();
+		        headers.set("Authorization", authToken);
+		        headers.set("Accept", "application/vnd.smartthings+json;v=20200501");
+		        headers.set(Constants.API_HEADER_CORRELATION_ID, loggingId);
+				
+		        HttpEntity<String> deviceCommandHttpEntity = new HttpEntity<>(null, headers);
+		        ResponseEntity<String> deviceCommandResponse = null;
+		        
+		        deviceCommandResponse = restTemplate.exchange(url, HttpMethod.POST, deviceCommandHttpEntity, String.class);
+	            if (deviceCommandResponse.getStatusCode().is2xxSuccessful()) {
+	            	log.info("[executeDeviceCommands] Request success for environment {}, deviceId: {}, logId: {}, commandResponse: {}, ",  env, deviceId, loggingId, deviceCommandResponse);
+	            }
+				
+			} else {
+				log.info("[executeDeviceCommands] This is NOT sumilated device.");
+				DeviceCommand deviceCommand = new DeviceCommand();
+				deviceCommand.component(component);
+				deviceCommand.setCapability(capability);
+				deviceCommand.setCommand(command);
+				if (!argument.equals("null") && !argument.equals("undefined")) {
+					log.info("[executeDeviceCommands] Command argument is not null.");
+					deviceCommand.addArgumentsItem(Integer.parseInt(argument));
+				}
+				
+				DeviceCommandsRequest commands = new DeviceCommandsRequest();
+				commands.addCommandsItem(deviceCommand);
+				
+				apiClient.setBasePath(platformUrl);
+		        DevicesApi devicesApi = apiClient.buildClient(DevicesApi.class);
+		        
+		        CreateDeviceCommandsResponse commandResponse = devicesApi.executeDeviceCommands(authToken, deviceId, commands);
+		        log.info("[executeDeviceCommands] Request success for environment {}, deviceId: {}, commandResponse: {}", env, deviceId, commandResponse.toString());
+			}
+	        return new DeviceCommandResponse(deviceId, component, capability, command, argument, "success");
+		} catch (Exception e) {
+            log.error("[executeDeviceCommands] Exception: {}, LogId {}", e, loggingId);
+        }
+        return new DeviceCommandResponse(deviceId, component, capability, command, argument, "failed");
 	}
 }

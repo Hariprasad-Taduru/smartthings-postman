@@ -53,8 +53,9 @@ public class DeviceController {
 									   @RequestParam(required = true) String component,
 									   @RequestParam(required = true) String capability,
 									   @RequestParam(required = true) String command,
-									   @RequestParam(required = true) String argument,
+									   @RequestParam(required = false) String argument,
+									   @RequestParam(required = false) String isSimulatedDevice,
 									   @RequestParam(required = true, defaultValue="stg") String env) {
-		return deviceService.executeDeviceCommands(deviceId, component, capability, command, argument, env);
+		return deviceService.executeDeviceCommands(deviceId, component, capability, command, argument, isSimulatedDevice, env);
 	}
 }
