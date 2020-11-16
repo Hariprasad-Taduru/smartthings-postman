@@ -12,9 +12,11 @@ import lombok.Data;
 @Configuration
 @ConfigurationProperties
 @PropertySources({
-@PropertySource(value = {"file:C:/env.config", 
-			 "file:/etc/env.config"}, //if same key, this will 'win' 
-		ignoreResourceNotFound = true)})
+@PropertySource(value = {
+			 "file:C:/st-postman-config/env.config.txt",
+			 "file:C:/st-postman-config/env.config",
+			 "file:/etc/st-postman-config/env.config"}, //if same key, this will 'win' 
+			 ignoreResourceNotFound = true)})
 @Data
 @Primary
 public class ExternalConfiguration {

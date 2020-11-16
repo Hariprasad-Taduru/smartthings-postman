@@ -110,7 +110,8 @@ public class DeviceClient {
 	    	devices.addAll(pagedDevice.getItems()); 
 	    }
 	    
-	    log.info("[getDevices] Request success for environment {}, locationId: {}, devices: {}", env, locationId, devices.toString());
+	    //log.info("[getDevices] Request success for environment {}, locationId: {}, devices: {}", env, locationId, devices.toString());
+	    log.info("[getDevices] Request success for environment {}, locationId: {}", env, locationId);
 	    return devices;
 	}
 	
@@ -183,7 +184,11 @@ public class DeviceClient {
 				deviceCommand.setCommand(command);
 				if (!argument.equals("null") && !argument.equals("undefined")) {
 					log.info("[executeDeviceCommands] Command argument is not null.");
-					deviceCommand.addArgumentsItem(Integer.parseInt(argument));
+					if (capability.equals("switchLevel") || capability.equals("audioVolume") || capability.equals("ovenSetpoint")) {
+						deviceCommand.addArgumentsItem(Integer.parseInt(argument));
+					} else {
+						deviceCommand.addArgumentsItem(argument);
+					}
 				}
 				
 				DeviceCommandsRequest commands = new DeviceCommandsRequest();

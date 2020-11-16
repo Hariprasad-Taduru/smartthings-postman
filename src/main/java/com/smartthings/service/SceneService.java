@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.smartthings.client.SceneClient;
 import com.smartthings.common.Scene;
+import com.smartthings.common.SceneExecuteResponse;
 import com.smartthings.common.SceneMetaInfo;
 
 @Service
@@ -33,7 +34,10 @@ public class SceneService {
 	}
 	
 	public Scene getSceneDetails(String sceneId, String env) {
-	
 		return sceneClient.getSceneDetails(sceneId, env);
+	}
+	
+	public SceneExecuteResponse executeScene(String sceneId, String env) {
+		return sceneClient.executeScene(sceneId, env);
 	}
 }
