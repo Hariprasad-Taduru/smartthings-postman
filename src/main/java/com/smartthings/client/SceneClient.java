@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import com.smartthings.common.Constants;
 import com.smartthings.common.PagedScenes;
 import com.smartthings.common.Scene;
+import com.smartthings.common.SceneExecuteResponse;
 import com.smartthings.config.ExternalConfiguration;
 import com.smartthings.util.STObjectMapper;
 
@@ -79,7 +80,8 @@ public class SceneClient {
         List<Scene> scenes = new ArrayList<Scene>();
         
         scenes = getScenesHelper(url, sceneHttpEntity, scenes);
-        log.info("[listScenes] Request success for environment {}, locationId: {}, logId {}, scenes: {}", env, locationId, loggingId, scenes.toString());
+        //log.info("[listScenes] Request success for environment {}, locationId: {}, logId {}, scenes: {}", env, locationId, loggingId, scenes.toString());
+        log.info("[listScenes] Request success for environment {}, locationId: {}, logId {}", env, locationId, loggingId);
         return scenes;
     }
 	
@@ -146,6 +148,49 @@ public class SceneClient {
             }
         }
         return null;
+    }
+    
+    public SceneExecuteResponse executeScene(String sceneId, String env) {
+    	if (env.equals("prd")) {
+		   platformUrl = prdUrl;
+		   authToken = "Bearer " + extConfig.getPrdToken();
+		   locationId = extConfig.getPrdTestLocationId();
+		} else if (env.equals("acpt")) {
+			platformUrl = acptUrl;
+			authToken = "Bearer " + extConfig.getAcptToken();
+			locationId = extConfig.getAcptTestLocationId();
+		} else {
+		   platformUrl = stgUrl;
+		   authToken = "Bearer " + extConfig.getStgToken();
+		   locationId = extConfig.getStgTestLocationId();
+		}
+		
+		String url = platformUrl + "/scenes/" + sceneId + "/execute";
+		
+		String loggingId = UUID.randomUUID().toString();
+			
+		log.info("[executeScene] Requested for environment {}, sceneId: {}, locationId: {}, logId: {}", env, sceneId, locationId, loggingId);
+			
+		HttpHeaders headers = new HttpHeaders();
+	    headers.set("Authorization", authToken);
+	    //headers.set("Accept", "application/vnd.smartthings+json;v=20200501");
+		headers.set("Accept", "application/vnd.smartthings+json;");
+        headers.set(Constants.API_HEADER_CORRELATION_ID, loggingId);
+		
+        HttpEntity<String> sceneHttpEntity = new HttpEntity<>(null, headers);
+        
+        ResponseEntity<String> sceneResponse = restTemplate.exchange(url,
+                HttpMethod.POST, sceneHttpEntity, String.class);
+
+        if (sceneResponse.getStatusCode().is2xxSuccessful()) {
+        	log.info("[executeScene] Request success for environment {}, sceneId: {}, locationId: {}, logId: {}", env, sceneId, locationId, loggingId);
+            try {
+                return stObjectMapper.readValue(sceneResponse.getBody(), SceneExecuteResponse.class);
+            } catch (IOException e) {
+                log.info("[executeScene] Exception: {}", e);
+            }
+        }
+        return new SceneExecuteResponse("failed");
     }
 
 }

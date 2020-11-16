@@ -62,7 +62,8 @@ public class LocationClient {
         LocationsApi locationApi  =  apiClient.buildClient(LocationsApi.class);
         try {
         	testLocation = locationApi.getLocation(authToken, locationId);
-        	log.info("[getTestLocation] Request success for environment {}, locationId: {}, details: {}", env, locationId, testLocation.toString());
+        	//log.info("[getTestLocation] Request success for environment {}, locationId: {}, details: {}", env, locationId, testLocation.toString());
+        	log.info("[getTestLocation] Request success for environment {}, locationId: {}", env, locationId);
         } catch (Exception e) {
             log.error("[getTestLocation] Exception: {}, For the location: {}", e, locationId);
         }

@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.smartthings.common.Scene;
+import com.smartthings.common.SceneExecuteResponse;
 import com.smartthings.common.SceneMetaInfo;
 import com.smartthings.service.SceneService;
 
@@ -50,5 +52,12 @@ public class SceneController {
 	@ApiResponse(content = @Content(schema = @Schema(hidden = true)))
 	List<Scene> getMyScenes(@RequestParam(required = true, defaultValue="stg") String env) {
 		return sceneService.listScenes(env);
+	}
+	
+	@PostMapping(value = "/executeScene", produces = { "application/json"})
+    @Operation(summary = "Execute given scene Id")
+	@ApiResponse(content = @Content(schema = @Schema(hidden = true)))
+	SceneExecuteResponse executeScene(@RequestParam(required = true) String sceneId, @RequestParam(required = true, defaultValue="stg") String env) {
+		return sceneService.executeScene(sceneId, env);
 	}
 }
