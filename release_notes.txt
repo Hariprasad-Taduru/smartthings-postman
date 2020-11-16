@@ -1,3 +1,10 @@
+Version 3.0 release details:
+-----------------------------
+	Date: 16-Nov-2020
+	Features:
+		1. Added support for executing of scenes.
+		2. Added support for executing commands on DA, VD devices
+		
 Version 2.0 release details:
 -----------------------------
 	Date: 07-Nov-2020
