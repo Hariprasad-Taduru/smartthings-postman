@@ -1,3 +1,10 @@
+Version 3.1 release details:
+-----------------------------
+	Date: 29-Nov-2020
+	Features:
+		1. Added support for live logging.
+		2. Actual device command error response is shown instead of generic error.
+
 Version 3.0 release details:
 -----------------------------
 	Date: 16-Nov-2020

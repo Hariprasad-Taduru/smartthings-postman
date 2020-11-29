@@ -2,17 +2,29 @@ package com.smartthings.client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.smartthings.common.Constants;
+import com.smartthings.common.SubscriptionFilters;
+import com.smartthings.common.SubscriptionRequest;
 import com.smartthings.config.ExternalConfiguration;
 import com.smartthings.sdk.client.ApiClient;
 import com.smartthings.sdk.client.methods.LocationsApi;
 import com.smartthings.sdk.client.models.Location;
 import com.smartthings.sdk.client.models.PagedLocation;
 import com.smartthings.sdk.client.models.PagedLocations;
+import com.smartthings.util.STObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,6 +46,12 @@ public class LocationClient {
 	
 
 	private ApiClient apiClient = new ApiClient();
+	
+	@Autowired
+    private RestTemplate restTemplate;
+	
+	@Autowired
+    private STObjectMapper stObjectMapper;
 	
 	private String platformUrl;
 	private String authToken;
@@ -135,4 +153,70 @@ public class LocationClient {
         
        return completeLocations;
     }
+	
+public JsonNode getLiveTrailLogs(String env) {
+		
+		if (env.equals("prd")) {
+			platformUrl = prdUrl;
+			authToken = "Bearer " + extConfig.getPrdToken();
+			locationId = extConfig.getPrdTestLocationId();
+		} else if (env.equals("acpt")) {
+			platformUrl = acptUrl;
+			authToken = "Bearer " + extConfig.getAcptToken();
+			locationId = extConfig.getAcptTestLocationId();
+		} else {
+			platformUrl = stgUrl;
+			authToken = "Bearer " + extConfig.getStgToken();
+			locationId = extConfig.getStgTestLocationId();
+		}
+		
+		log.info("[getLiveTrailLogs] Requested for environment {}, locationId: {}", env, locationId);
+		
+		String url = platformUrl + "/subscriptions";
+		
+		String loggingId = UUID.randomUUID().toString();
+		
+		log.info("[getLiveTrailLogs] Requested for environment {}, locationId: {}, logId: {}", env, locationId, loggingId);
+		
+		HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", authToken);
+        headers.set("Accept", "application/json");
+        headers.set("Contect-Type", "application/json");
+        headers.set(Constants.API_HEADER_CORRELATION_ID, loggingId);
+        ArrayList<String> locationArray = new ArrayList<String>();
+        locationArray.add(locationId);
+        SubscriptionFilters filters = new SubscriptionFilters("LOCATIONIDS", locationArray);
+        
+        ArrayList<SubscriptionFilters> filterList= new ArrayList<SubscriptionFilters>();
+        filterList.add(filters);
+        
+        SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
+        subscriptionRequest.setName("locationSubscription");
+        subscriptionRequest.setVersion("1");
+        subscriptionRequest.setSubscriptionFilters(filterList);
+        String requestBody = null;
+		try {
+			requestBody = stObjectMapper.writeValueAsString(subscriptionRequest);
+		} catch (JsonProcessingException e1) {
+			log.error("[getLiveTrailLogs]Request creation failed: {}", e1.getMessage());
+		}
+        HttpEntity<String> httpEntity = new HttpEntity<String>(requestBody, headers);
+        ResponseEntity<String> response = null;
+        
+        log.info("[getLiveTrailLogs] Http request body: {}", requestBody);
+        
+        try {
+        	response = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+            if (response.getStatusCode().is2xxSuccessful()) {
+            	
+            	log.info("[getLiveTrailLogs] Request success for environment {}, locationId: {}, logId: {}",  env, locationId, loggingId);
+            	log.info("[getLiveTrailLogs] Response: {}", response.getBody());
+            	JsonNode json = stObjectMapper.readTree(response.getBody());
+            	return json;
+            }
+        } catch (Exception e) {
+            log.error("[getLiveTrailLogs] Exception: {}, Response: {}, LogId {}", e, response, loggingId);
+        }
+        return null;
+	}
 }

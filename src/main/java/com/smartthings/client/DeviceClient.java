@@ -204,6 +204,7 @@ public class DeviceClient {
 		} catch (Exception e) {
             log.error("[executeDeviceCommands] Exception: {}, LogId {}", e, loggingId);
         }
-        return new DeviceCommandResponse(deviceId, component, capability, command, argument, "failed");
+		 return new DeviceCommandResponse(deviceId, component, capability, command, argument, "Device is not reachable.");
+        
 	}
 }
