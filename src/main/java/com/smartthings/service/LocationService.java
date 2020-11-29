@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.smartthings.client.LocationClient;
 import com.smartthings.sdk.client.models.Location;
 
@@ -21,5 +22,9 @@ public class LocationService {
 	
 	public List<Location> getLocations(String env) {
 		return locationClient.getLocations(env);
+	}
+	
+	public JsonNode getLiveTrailLogs(String env) {
+		return locationClient.getLiveTrailLogs(env);
 	}
 }
