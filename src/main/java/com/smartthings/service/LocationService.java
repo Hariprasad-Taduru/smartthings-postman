@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.smartthings.client.LocationClient;
+import com.smartthings.common.LiveLogSubscriptionResponse;
 import com.smartthings.sdk.client.models.Location;
 
 @Service
@@ -24,7 +24,7 @@ public class LocationService {
 		return locationClient.getLocations(env);
 	}
 	
-	public JsonNode getLiveTrailLogs(String env) {
+	public LiveLogSubscriptionResponse getLiveTrailLogs(String env) {
 		return locationClient.getLiveTrailLogs(env);
 	}
 }

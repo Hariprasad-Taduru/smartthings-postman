@@ -1,3 +1,11 @@
+
+Version 4.0 release details:
+-----------------------------
+	Date: 20-Dec-2020
+	Features:
+		1. Added dashboard support to view stats of the SmartThings location.
+		2. PAT token removed from code.
+
 Version 3.1 release details:
 -----------------------------
 	Date: 29-Nov-2020

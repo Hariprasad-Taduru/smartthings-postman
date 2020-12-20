@@ -15,12 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.smartthings.common.Constants;
 import com.smartthings.common.DeviceCommandResponse;
 import com.smartthings.config.ExternalConfiguration;
 import com.smartthings.sdk.client.ApiClient;
 import com.smartthings.sdk.client.methods.DevicesApi;
+import com.smartthings.sdk.client.models.CapabilityStatus;
 import com.smartthings.sdk.client.models.CreateDeviceCommandsResponse;
 import com.smartthings.sdk.client.models.Device;
 import com.smartthings.sdk.client.models.DeviceCommand;
@@ -83,6 +83,32 @@ public class DeviceClient {
         return deviceStatus;
     }
 	
+	public CapabilityStatus getDeviceMainStatus(String deviceId, String capabilityId, String componentId, String env) {
+		if (env.equals("prd")) {
+			platformUrl = prdUrl;
+			authToken = "Bearer " + extConfig.getPrdToken();
+			locationId = extConfig.getPrdTestLocationId();
+		} else if (env.equals("acpt")) {
+			platformUrl = acptUrl;
+			authToken = "Bearer " + extConfig.getAcptToken();
+			locationId = extConfig.getAcptTestLocationId();
+		} else {
+			platformUrl = stgUrl;
+			authToken = "Bearer " + extConfig.getStgToken();
+			locationId = extConfig.getStgTestLocationId();
+		}
+		
+		apiClient.setBasePath(platformUrl);
+		log.info("[getDeviceMainStatus] Requested for environment {}, deviceId: {}", env, deviceId);
+        DevicesApi devicesApi = apiClient.buildClient(DevicesApi.class);
+        try {
+	        CapabilityStatus capabilityStatus = devicesApi.getDeviceStatusByCapability(authToken, deviceId, componentId, capabilityId);
+	        log.info("[getDeviceMainStatus] Request success for environment {}, deviceId: {}", env, deviceId);
+	        return capabilityStatus; 
+        } catch (Exception e) {
+        	return null;
+        }
+	}
 
 	public List<Device> getDevices(String env) {
 		if (env.equals("prd")) {

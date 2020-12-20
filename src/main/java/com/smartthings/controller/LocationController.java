@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.smartthings.common.LiveLogSubscriptionResponse;
 import com.smartthings.config.ExternalConfiguration;
 import com.smartthings.sdk.client.models.Location;
 import com.smartthings.service.LocationService;
@@ -54,7 +54,7 @@ public class LocationController {
 	@GetMapping(value = "/livetrail", produces = { "application/json"})
     @Operation(summary = "Get live logs.")
 	@ApiResponse(content = @Content(schema = @Schema(hidden = true)))
-	JsonNode getLiveStream(@RequestParam(required = true, defaultValue="stg") String env) {
+	LiveLogSubscriptionResponse getLiveStream(@RequestParam(required = true, defaultValue="stg") String env) {
 		log.info("[getLiveStream] env: {}", env);
 		return locationService.getLiveTrailLogs(env);
 	}
