@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.smartthings.common.Constants;
+import com.smartthings.common.LiveLogSubscriptionResponse;
 import com.smartthings.common.SubscriptionFilters;
 import com.smartthings.common.SubscriptionRequest;
 import com.smartthings.config.ExternalConfiguration;
@@ -154,7 +155,7 @@ public class LocationClient {
        return completeLocations;
     }
 	
-public JsonNode getLiveTrailLogs(String env) {
+public LiveLogSubscriptionResponse getLiveTrailLogs(String env) {
 		
 		if (env.equals("prd")) {
 			platformUrl = prdUrl;
@@ -210,9 +211,8 @@ public JsonNode getLiveTrailLogs(String env) {
             if (response.getStatusCode().is2xxSuccessful()) {
             	
             	log.info("[getLiveTrailLogs] Request success for environment {}, locationId: {}, logId: {}",  env, locationId, loggingId);
-            	log.info("[getLiveTrailLogs] Response: {}", response.getBody());
             	JsonNode json = stObjectMapper.readTree(response.getBody());
-            	return json;
+            	return new LiveLogSubscriptionResponse(json.get("registrationUrl").asText(), authToken);
             }
         } catch (Exception e) {
             log.error("[getLiveTrailLogs] Exception: {}, Response: {}, LogId {}", e, response, loggingId);

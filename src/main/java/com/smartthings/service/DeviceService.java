@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.smartthings.client.DeviceClient;
 import com.smartthings.common.DeviceCommandResponse;
 import com.smartthings.common.DeviceMetaInfo;
+import com.smartthings.sdk.client.models.CapabilityStatus;
 import com.smartthings.sdk.client.models.Device;
 import com.smartthings.sdk.client.models.DeviceStatus;
 
@@ -27,7 +28,7 @@ public class DeviceService {
 		
 		 List<DeviceMetaInfo> deviceMetaInfoList = new ArrayList<DeviceMetaInfo>();
 		 for(Device device: devices) {
-			 deviceMetaInfoList.add(new DeviceMetaInfo(device.getDeviceId(), device.getLabel(), device.getDeviceTypeName(), device));
+			 deviceMetaInfoList.add(new DeviceMetaInfo(device.getDeviceId(), device.getLabel(), device.getDeviceTypeName(), device, null));
 		 }
 		 
 		return deviceMetaInfoList;
@@ -35,6 +36,10 @@ public class DeviceService {
 	
 	public DeviceStatus getDeviceStatus(String deviceId, String env) {	
 		return deviceClient.getDeviceStatus(deviceId, env);
+    }
+	
+	public CapabilityStatus getDeviceMainStatus(String deviceId, String capabilityId, String componentId, String env) {	
+		return deviceClient.getDeviceMainStatus(deviceId, capabilityId, componentId, env);
     }
 	
 	public DeviceCommandResponse executeDeviceCommands(String deviceId, String component, String capability, String command, String argument, String isSimulatedDevice, String env) {	

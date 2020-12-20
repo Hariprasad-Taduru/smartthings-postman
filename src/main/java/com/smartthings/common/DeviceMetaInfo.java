@@ -1,5 +1,6 @@
 package com.smartthings.common;
 
+import com.smartthings.sdk.client.models.CapabilityStatus;
 import com.smartthings.sdk.client.models.Device;
 
 import lombok.AllArgsConstructor;
@@ -15,4 +16,7 @@ public class DeviceMetaInfo {
 	String deviceTypeName;
 	
 	Device deviceSnapshot;
+	
+	CapabilityStatus mainStatus;
+
 }

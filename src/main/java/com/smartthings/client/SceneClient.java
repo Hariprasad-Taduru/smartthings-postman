@@ -184,11 +184,7 @@ public class SceneClient {
 
         if (sceneResponse.getStatusCode().is2xxSuccessful()) {
         	log.info("[executeScene] Request success for environment {}, sceneId: {}, locationId: {}, logId: {}", env, sceneId, locationId, loggingId);
-            try {
-                return stObjectMapper.readValue(sceneResponse.getBody(), SceneExecuteResponse.class);
-            } catch (IOException e) {
-                log.info("[executeScene] Exception: {}", e);
-            }
+        	 return new SceneExecuteResponse("success");
         }
         return new SceneExecuteResponse("failed");
     }
